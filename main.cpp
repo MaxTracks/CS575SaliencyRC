@@ -8,7 +8,7 @@ int main( int argc, char* argv[] ) {
 
     srand(time(NULL));
 
-    unsigned int regionCount = 1728
+    unsigned int regionCount = 1728;
     double threshold = 5;
     std::vector<PixelRegion*> regions;
 
@@ -64,7 +64,7 @@ int main( int argc, char* argv[] ) {
     photo = new Photo(width, height, pixels);
 
     for(unsigned int i = 0; i < regionCount; i++) {
-        regions.push_back(new PixelRegion(photo))
+        regions.push_back(new PixelRegion(photo));
     }
 
     do {
@@ -72,12 +72,12 @@ int main( int argc, char* argv[] ) {
             regions[i]->clear();
         }
 
-        for(unsigned int i = 0; i < ; i++) {
+        for(unsigned int i = 0; i < photo->size(); i++) {
             int closest = 0;
             double dist;
 
             for(unsigned int j = 0; j < regions.size(); j++) {
-                dis = regions[j]->distTo(photo->getPixel(i));
+                dist = regions[j]->distTo(photo->getPixel(i));
                 if(dist < regions[closest]->distTo(photo->getPixel(i))) {
                     closest = j;
                 }

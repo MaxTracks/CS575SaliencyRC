@@ -58,6 +58,10 @@ Pixel* Photo::getRandPos(void) {
     return pixels[rand() % x*y];
 }
 
+unsigned int Photo::size(void) {
+    return x*y;
+}
+
 PixelRegion::PixelRegion(Photo *photo) : photo(photo), mid(new Pixel(photo->getRandPos())) {}
 
 PixelRegion::~PixelRegion() {
@@ -87,6 +91,14 @@ double PixelRegion::adjMid() {
     mid->set(r, g, b);
     
     return diff;
+}
+
+double PixelRegion::distTo(Pixel *pxl) {
+    int dr = pxl->gred() - mid->gred();
+    int dg = pxl->ggreen() - mid->ggreen();
+    int db = pxl->gblue() - mid->gblue();
+
+    return std::sqrt(std::pow(dr, 2) + std::pow(dg, 2) + std::pow(db, 2));
 }
 
 double PixelRegion::distTo(unsigned int r, unsigned int g, unsigned int b) {

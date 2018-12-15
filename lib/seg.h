@@ -31,6 +31,8 @@ class Photo {
         Pixel* getPixel(unsigned int i);
         Pixel* getRandPos(void);
         void setPixel(Pixel *pixel, unsigned int x, unsigned int y);
+        unsigned int size(void);
+
         ~Photo();
 };
 
@@ -45,7 +47,7 @@ class PixelRegion {
         ~PixelRegion();
         
         double adjMid(void);
-        double distTo(unsigned int x, unsigned int y);
+        double distTo(Pixel *pxl);
         double distTo(unsigned int r, unsigned int g, unsigned int b);
         void addPix(Pixel *pixel);
         void clear(void);
