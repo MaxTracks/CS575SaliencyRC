@@ -7,16 +7,17 @@
 
 class Pixel {
     private:
-        unsigned int red, green, blue;
+        int red, green, blue, alpha;
 
     public:
-        Pixel(unsigned int red, unsigned int gree, unsigned int blue);
+        Pixel(int red, int gree, int blue, int alpha);
         Pixel(Pixel *pxl);
 
-        unsigned int gred(void);
-        unsigned int ggreen(void);
-        unsigned int gblue(void);
-        void set(unsigned int r, unsigned int g, unsigned int b);
+        int gred(void);
+        int ggreen(void);
+        int gblue(void);
+        int galpha(void);
+        void set(int r, int g, int b);
 };
 
 class Photo {
@@ -48,7 +49,7 @@ class PixelRegion {
         
         double adjMid(void);
         double distTo(Pixel *pxl);
-        double distTo(unsigned int r, unsigned int g, unsigned int b);
+        double distTo(int r, int g, int b);
         void addPix(Pixel *pixel);
         void clear(void);
         void change(void);

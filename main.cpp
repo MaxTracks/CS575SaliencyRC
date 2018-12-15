@@ -55,7 +55,7 @@ int main( int argc, char* argv[] ) {
     for(int x = 0; x < width; x++) {
         for(int y = 0; y < height; y++) {
             RGBApixel tmp1 = test.GetPixel(x, y);
-            Pixel *tmp2 = new Pixel(tmp1.Red, tmp1.Green, tmp1.Blue);
+            Pixel *tmp2 = new Pixel(tmp1.Red, tmp1.Green, tmp1.Blue, tmp1.Alpha);
             pixels.push_back(tmp2);
             break;
         }

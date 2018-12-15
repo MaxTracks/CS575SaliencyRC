@@ -10,23 +10,27 @@
 #include <fstream>
 #include <cstdlib>
 
-Pixel::Pixel(unsigned int r, unsigned int g, unsigned int b): red(r), green(g), blue(b) {}
+Pixel::Pixel(int r, int g, int b, int a): red(r), green(g), blue(b), alpha(a) {}
 
 Pixel::Pixel(Pixel *pxl): red(pxl->red), green(pxl->green), blue(pxl->blue) {}
 
-unsigned int Pixel::gred(void) {
+int Pixel::gred(void) {
     return red;
 }
 
-unsigned int Pixel::ggreen(void) {
+int Pixel::ggreen(void) {
     return green;
 }
 
-unsigned int Pixel::gblue(void) {
+int Pixel::gblue(void) {
     return blue;
 }
 
-void Pixel::set(unsigned int r, unsigned int g, unsigned int b) {
+int Pixel::galpha(void) {
+    return alpha;
+}
+
+void Pixel::set(int r, int g, int b) {
     red = r;
     green = g;
     blue = b;
@@ -36,7 +40,7 @@ Photo::Photo(unsigned int width, unsigned int height, std::vector<Pixel*> pxls) 
     x = width;
     y = height;
     for(unsigned int i = 0; i < x*y; i++) {
-        pixels.push_back(new Pixel(0, 0, 0));
+        pixels.push_back(new Pixel(0, 0, 0, 0));
     }
 }
 
@@ -69,7 +73,7 @@ PixelRegion::~PixelRegion() {
 }
 
 double PixelRegion::adjMid() {
-    unsigned int r = 0, g = 0, b = 0;
+    int r = 0, g = 0, b = 0, a = 0;
     
     for(unsigned int i = 0; i < pixels.size(); i++) {
         r += pixels[i]->gred();
@@ -101,7 +105,7 @@ double PixelRegion::distTo(Pixel *pxl) {
     return std::sqrt(std::pow(dr, 2) + std::pow(dg, 2) + std::pow(db, 2));
 }
 
-double PixelRegion::distTo(unsigned int r, unsigned int g, unsigned int b) {
+double PixelRegion::distTo(int r, int g, int b) {
     int dr = r - mid->gred();
     int dg = g - mid->ggreen();
     int db = b - mid->gblue();
