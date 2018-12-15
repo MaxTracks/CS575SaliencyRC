@@ -1,11 +1,17 @@
 #include "EasyBMP.h"
 #include "seg.h"
 
-using namespace std;
 
 int main( int argc, char* argv[] ) {
     BMP test;
     //test.ReadFromFile("data/images/asdf.bmp");
+
+    srand(time(NULL));
+
+    unsigned int regionCount = 1728
+    double threshold = 5;
+    std::vector<PixelRegion*> regions;
+
     test.ReadFromFile("data/images/EasyBMPtext.bmp");
 
     /*
@@ -40,6 +46,8 @@ int main( int argc, char* argv[] ) {
     int height = test.TellHeight();
     int width = test.TellWidth();
     std::vector<Pixel*> pixels;
+    Photo *photo;
+    double avgMidChange;
 
     std::cout << "Height: " << height << "\n";
     std::cout << "Width: " << width << "\n";
@@ -51,6 +59,40 @@ int main( int argc, char* argv[] ) {
             pixels.push_back(tmp2);
             break;
         }
+    }
+
+    photo = new Photo(width, height, pixels);
+
+    for(unsigned int i = 0; i < regionCount; i++) {
+        regions.push_back(new PixelRegion(photo))
+    }
+
+    do {
+        for(unsigned int i = 0; i < regionCount; i++) {
+            regions[i]->clear();
+        }
+
+        for(unsigned int i = 0; i < ; i++) {
+            int closest = 0;
+            double dist;
+
+            for(unsigned int j = 0; j < regions.size(); j++) {
+                dis = regions[j]->distTo(photo->getPixel(i));
+                if(dist < regions[closest]->distTo(photo->getPixel(i))) {
+                    closest = j;
+                }
+            }
+        }
+
+        avgMidChange = 0;
+        for(unsigned int i = 0; i < regions.size(); i++) {
+            avgMidChange += regions[i]->adjMid();
+        }
+        avgMidChange /= regions.size();
+    }while(avgMidChange > threshold);
+
+    for(unsigned int i = 0; i < regions.size(); i++) {
+        regions[i]->change();
     }
 
     return 0;
