@@ -1,4 +1,8 @@
+#include <vector>
+#include <cstdio>
 #include "EasyBMP.h"
+#include "EasyBMP_DataStructures.h"
+#include "saliencyRC.h"
 #include "seg.h"
 
 
@@ -8,7 +12,7 @@ int main( int argc, char* argv[] ) {
 
     srand(time(NULL));
 
-    unsigned int regionCount = 1728;
+    unsigned int regionCount = 4;
     double threshold = 5;
     std::vector<PixelRegion*> regions;
 
@@ -47,6 +51,7 @@ int main( int argc, char* argv[] ) {
     int width = test.TellWidth();
     std::vector<Pixel*> pixels;
     Photo *photo;
+	std::vector<RGBApixel> changed;
     double avgMidChange;
 
     std::cout << "Height: " << height << "\n";
@@ -54,10 +59,11 @@ int main( int argc, char* argv[] ) {
     
     for(int x = 0; x < width; x++) {
         for(int y = 0; y < height; y++) {
+			//printf("x = %d; y = %d\n", x, y);
             RGBApixel tmp1 = test.GetPixel(x, y);
             Pixel *tmp2 = new Pixel(tmp1.Red, tmp1.Green, tmp1.Blue, tmp1.Alpha);
+			//printf("Pixel: %d %d %d %d\n", tmp2->gred(), tmp2->ggreen(), tmp2->gblue(), tmp2->galpha());
             pixels.push_back(tmp2);
-            break;
         }
     }
 
@@ -94,6 +100,31 @@ int main( int argc, char* argv[] ) {
     for(unsigned int i = 0; i < regions.size(); i++) {
         regions[i]->change();
     }
+	
+	//for(int i = 0; i < photo->size(); i++)
+	//{
+	//	Pixel * pixl = photo->getPixel(i);
+	//	//printf("RGBA: %d %d %d %d\n", pixl->gred(), pixl->ggreen(), pixl->gblue(), pixl->galpha());
+	//}
 
+	auto salMap = regionSaliency(regions);
+	maskBySaliency(salMap);
+
+	RGBApixel rgba;
+	for(int i = 0; i < width; i++) {
+		for(int j = 0; j < height; j++) {
+			//std::cout << "Width = " << j << "; Height = " << i << "\n";
+			Pixel * pixl = photo->getPixel(i*height+j);
+			rgba.Red = pixl->gred();
+			rgba.Green = pixl->ggreen();
+			rgba.Blue = pixl->gblue();
+			rgba.Alpha = pixl->galpha();
+			//printf("RGBA: %d %d %d %d\n", rgba.Red, rgba.Green, rgba.Blue, rgba.Alpha);
+			//printf("RGBA: %d %d %d %d\n", pixl->gred(), pixl->ggreen(), pixl->gblue(), pixl->galpha());
+			test.SetPixel(i, j, rgba);
+		}
+	}
+
+	test.WriteToFile("test.bmp");
     return 0;
 }

@@ -21,6 +21,9 @@
 #ifndef _EasyBMP_BMP_h_
 #define _EasyBMP_BMP_h_
 
+#include "EasyBMP_DataStructures.h"
+#include <vector>
+
 bool SafeFread( char* buffer, int size, int number, FILE* fp );
 bool EasyBMPcheckDataSize( void );
 
@@ -66,6 +69,7 @@ class BMP
   
  BMP();
  BMP( BMP& Input );
+ BMP(BMP& base, std::vector<RGBApixel> newPixels);
  ~BMP();
  RGBApixel* operator()(int i,int j);
  

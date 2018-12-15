@@ -1,23 +1,25 @@
-
+#ifndef SEG_H
+#define SEG_H
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <cstdint>
 #include <vector>
 
 class Pixel {
     private:
-        int red, green, blue, alpha;
+        uint32_t red, green, blue, alpha;
 
     public:
-        Pixel(int red, int gree, int blue, int alpha);
+        Pixel(uint32_t red, uint32_t gree, uint32_t blue, uint32_t alpha);
         Pixel(Pixel *pxl);
 
-        int gred(void);
-        int ggreen(void);
-        int gblue(void);
-        int galpha(void);
-        void set(int r, int g, int b);
+        uint32_t gred(void) const;
+        uint32_t ggreen(void) const;
+        uint32_t gblue(void) const;
+        uint32_t galpha(void) const;
+        void set(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
 };
 
 class Photo {
@@ -49,8 +51,12 @@ class PixelRegion {
         
         double adjMid(void);
         double distTo(Pixel *pxl);
-        double distTo(int r, int g, int b);
+        double distTo(uint32_t r, uint32_t g, uint32_t b);
+		int size(void);
+		std::vector<Pixel*> getPixels();
         void addPix(Pixel *pixel);
         void clear(void);
         void change(void);
+		void change(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
 };
+#endif

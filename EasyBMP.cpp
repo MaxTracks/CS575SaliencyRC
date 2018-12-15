@@ -17,6 +17,7 @@
 * description: Actual source file                *
 *                                                *
 *************************************************/
+#include <vector>
 
 #include "EasyBMP.h"
 
@@ -289,6 +290,59 @@ BMP::BMP( BMP& Input )
    Pixels[i][j] = *Input(i,j);
 //   Pixels[i][j] = Input.GetPixel(i,j); // *Input(i,j);
   }
+ }
+}
+
+BMP::BMP(BMP& base, std::vector<RGBApixel> newPixels)
+{
+ // first, make the image empty.
+
+ Width = 1;
+ Height = 1;
+ BitDepth = 24;
+ Pixels = new RGBApixel* [Width];
+ Pixels[0] = new RGBApixel [Height];
+ Colors = NULL; 
+ XPelsPerMeter = 0;
+ YPelsPerMeter = 0;
+ 
+ MetaData1 = NULL;
+ SizeOfMetaData1 = 0;
+ MetaData2 = NULL;
+ SizeOfMetaData2 = 0;
+
+ // now, set the correct bit depth
+ 
+ SetBitDepth( base.TellBitDepth() );
+ 
+ // set the correct pixel size 
+ 
+ SetSize( base.TellWidth() , base.TellHeight() );
+
+ // set the DPI information from base
+ 
+ SetDPI( base.TellHorizontalDPI() , base.TellVerticalDPI() );
+ 
+ // if there is a color table, get all the colors
+
+ if( BitDepth == 1 || BitDepth == 4 ||  
+     BitDepth == 8 )
+ {
+  for( int k=0 ; k < TellNumberOfColors() ; k++ )
+  {
+   SetColor( k, base.GetColor( k )); 
+  }
+ }
+
+ 
+ // get all the pixels 
+ 
+ for(int j = 0; j < Height; j++)
+ {
+	 for(int i = 0; i < Width; i++)
+	 {
+		 Pixels[i][j] = newPixels[i*Width+j];
+	 }
  }
 }
 
