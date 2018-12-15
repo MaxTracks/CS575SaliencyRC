@@ -12,11 +12,17 @@ int main( int argc, char* argv[] ) {
 
     srand(time(NULL));
 
-    unsigned int regionCount = 4;
-    double threshold = 5;
+	if(argc < 2)
+	{
+		std::cerr << "Usage: ./saliency <BMP-file>\n";
+		return 1;
+	}
+
+    unsigned int regionCount = 20;
+    double threshold = 10000;
     std::vector<PixelRegion*> regions;
 
-    test.ReadFromFile("data/images/EasyBMPtext.bmp");
+    test.ReadFromFile(argv[1]);
 
     /*
     BMP Text;
@@ -88,6 +94,7 @@ int main( int argc, char* argv[] ) {
                     closest = j;
                 }
             }
+			regions[closest]->addPix(photo->getPixel(i));
         }
 
         avgMidChange = 0;
@@ -97,18 +104,24 @@ int main( int argc, char* argv[] ) {
         avgMidChange /= regions.size();
     }while(avgMidChange > threshold);
 
-    for(unsigned int i = 0; i < regions.size(); i++) {
-        regions[i]->change();
-    }
+    //for(unsigned int i = 0; i < regions.size(); i++) {
+    //    regions[i]->change();
+    //}
 	
-	//for(int i = 0; i < photo->size(); i++)
-	//{
-	//	Pixel * pixl = photo->getPixel(i);
-	//	//printf("RGBA: %d %d %d %d\n", pixl->gred(), pixl->ggreen(), pixl->gblue(), pixl->galpha());
-	//}
+	for(int i = 0; i < regions[0]->size(); i++)
+	{
+		Pixel * pixl = regions[0]->getPixels()[i];
+		printf("RGBA: %d %d %d %d\n", pixl->gred(), pixl->ggreen(), pixl->gblue(), pixl->galpha());
+	}
 
 	auto salMap = regionSaliency(regions);
 	maskBySaliency(salMap);
+
+	for(int i = 0; i < regions[0]->size(); i++)
+	{
+		Pixel * pixl = regions[0]->getPixels()[i];
+		printf("RGBA: %d %d %d %d\n", pixl->gred(), pixl->ggreen(), pixl->gblue(), pixl->galpha());
+	}
 
 	RGBApixel rgba;
 	for(int i = 0; i < width; i++) {

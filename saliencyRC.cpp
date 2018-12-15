@@ -130,11 +130,13 @@ std::multimap<double, PixelRegion*> regionSaliency(std::vector<PixelRegion*> reg
 
 void maskBySaliency(std::multimap<double, PixelRegion*> salMap) {
 	unsigned int step = MAX_COLOR / salMap.size();
-	unsigned int clrVal = 0;
+	unsigned int clrVal = MAX_COLOR;
 
+	int i = 0;
 	for(auto& elem : salMap) {
-		elem.second->change(clrVal, clrVal, clrVal, clrVal);
-		clrVal += step;
+		elem.second->change(clrVal, clrVal, clrVal, 0);
+		clrVal -= step;
+		i++;
 	}
 }
 
